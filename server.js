@@ -59,20 +59,17 @@ app.get("/findStock",async (req, res)=> {
 // http://localhost:3001/findStock/1
 // http://localhost:3001/findStock/100
 
-app.get("findStockDetails/:symbol",async(req,res)=> {
-    try{
-        let pid = req.params.id;    // string consider as a string
-        let result = await db.collection("stock").findOne({_id:Number(pid)});
-       // let result = await db.collection("stock").find({_id:Number(pid)}).toArray() 
-       // res.json(result);
-        if(result==null){
-            res.json({"msg":"Stock not found"}); // if stock not found, send a message to the client    
-
-        }else {
-            res.json(result); // if stock found, send the stock information to the client
+app.get("/findStockDetails/:symbol", async (req, res) => {
+    try {
+        let symbol = req.params.symbol; // Get the stock symbol from the request parameters
+        let result = await db.collection("stock").findOne({ symbol: symbol }); // Search by symbol
+        if (result == null) {
+            res.json({ "msg": "Stock not found" }); // If stock not found, send a message to the client
+        } else {
+            res.json(result); // If stock found, send the stock information to the client
         }
-    }catch(error){
-        res.json({"msg":error});
+    } catch (error) {
+        res.json({ "msg": error });
     }
 });
 
